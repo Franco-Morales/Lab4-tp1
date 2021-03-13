@@ -7,6 +7,4 @@ import com.app.main.entities.Empresa;
 
 
 @Repository
-public interface EmpresaRepository extends JpaRepository<Empresa, Integer>{
-
-}
+public interface EmpresaRepository extends JpaRepository<Empresa, Integer>{ }

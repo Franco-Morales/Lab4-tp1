@@ -31,7 +31,7 @@ public class Noticia {
 	@Column(updatable = false, nullable = false)
 	private Calendar fecha;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_empresa")
 	private Empresa empresa;
 
@@ -105,7 +105,7 @@ public class Noticia {
 		this.fecha = fecha;
 	}
 
-
+	
 	public Empresa getEmpresa() {
 		return empresa;
 	}

@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.app.main.entities.Noticia;
 
 @Repository
-public interface NoticiaRepository extends JpaRepository<Noticia, Integer>{
-
-}
+public interface NoticiaRepository extends JpaRepository<Noticia, Integer>{ }

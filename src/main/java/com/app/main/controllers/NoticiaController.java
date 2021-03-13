@@ -15,17 +15,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.main.entities.Empresa;
-import com.app.main.servicies.EmpresaService;
+import com.app.main.entities.Noticia;
+import com.app.main.servicies.NoticiaService;
+
 
 @Controller
 @RestController
-@RequestMapping(path = "api/v1/empresas")
-public class EmpresaController implements com.app.main.controllers.Controller<Empresa>{
-	private EmpresaService service;
+@RequestMapping(path = "api/v1/noticias")
+public class NoticiaController implements com.app.main.controllers.Controller<Noticia>{
+	private NoticiaService service;
 
 	
-	public EmpresaController(EmpresaService service) {
+	public NoticiaController(NoticiaService service) {
 		this.service = service;
 	}
 
@@ -33,42 +34,44 @@ public class EmpresaController implements com.app.main.controllers.Controller<Em
 	@Override
 	@GetMapping(path = "/")
 	@CrossOrigin("*")
-	public List<Empresa> getAll() {
+	public List<Noticia> getAll() {
 		return ResponseEntity.status(HttpStatus.OK).body(service.getAll()).getBody();
 	}
+
 
 	@Override
 	@GetMapping(path = "/{id}")
 	@CrossOrigin("*")
-	public Empresa getOne(@PathVariable int id) {
+	public Noticia getOne(int id) {
 		return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id)).getBody();
 	}
+
 
 	@Override
 	@PostMapping(path = "/")
 	@CrossOrigin("*")
-	public ResponseEntity save(Empresa t) {
-		Empresa emp = this.service.save(t);
+	public ResponseEntity save(@RequestBody Noticia t) {
+		Noticia noticia = this.service.save(t);
 		
-		if(emp.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(service.save(t));
+		if(noticia.getId() != 0) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(noticia);
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
 		}
 	}
 
+
 	@Override
 	@PutMapping(path = "/{id}")
 	@CrossOrigin("*")
-	public ResponseEntity update(@RequestBody Empresa t, @PathVariable int id) {
-		Empresa temp = service.update(t, id);
+	public ResponseEntity update(@RequestBody Noticia t, @PathVariable int id) {
+		Noticia noticia = service.update(t, id);
 		
-		if(temp.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(temp);
+		if(noticia.getId() != 0) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(noticia);
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
 		}
-		
 	}
 
 	@Override
