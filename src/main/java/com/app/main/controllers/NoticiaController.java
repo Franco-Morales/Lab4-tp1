@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.main.entities.Noticia;
@@ -36,8 +37,28 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
-
-
+	
+	
+	@GetMapping("/search")
+	public ResponseEntity<?> search(@RequestParam String query) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.search(query));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
+	}
+	
+	
+	@GetMapping("/firstFive")
+	public ResponseEntity<?> firstFive() throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.fisrtFiveNoticias());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
+	}
+	
+	
 	@Override
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<?> getOne(int id) throws Exception {

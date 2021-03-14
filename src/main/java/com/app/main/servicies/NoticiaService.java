@@ -123,4 +123,58 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			throw new Exception(e.getMessage());
 		}
 	}
+
+	
+	//Search y Limit
+	
+	
+	public List<Noticia> search(String query) throws Exception {
+		try {
+			List<Noticia> noticias = new ArrayList<Noticia>();
+			
+			for (Noticia noticia : repository.search(query)) {
+				Noticia temp = new Noticia();
+				
+				temp.setContent(noticia.getContent());
+				temp.setFecha(noticia.getFecha());
+				temp.setId(noticia.getId());
+				temp.setImg(noticia.getImg());
+				temp.setPublicado(noticia.isPublicado());
+				temp.setResumen(noticia.getResumen());
+				temp.setTitulo(noticia.getTitulo());
+				
+				temp.setEmpresa(noticia.getEmpresa());
+				
+				noticias.add(temp);
+			}
+			return noticias;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	public List<Noticia> fisrtFiveNoticias() throws Exception {
+		try {
+			List<Noticia> noticias = new ArrayList<Noticia>();
+			
+			for (Noticia noticia : repository.primerasCincoNoticias()) {
+				Noticia temp = new Noticia();
+				
+				temp.setContent(noticia.getContent());
+				temp.setFecha(noticia.getFecha());
+				temp.setId(noticia.getId());
+				temp.setImg(noticia.getImg());
+				temp.setPublicado(noticia.isPublicado());
+				temp.setResumen(noticia.getResumen());
+				temp.setTitulo(noticia.getTitulo());
+				
+				temp.setEmpresa(noticia.getEmpresa());
+				
+				noticias.add(temp);
+			}
+			return noticias;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 }
