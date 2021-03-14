@@ -4,123 +4,118 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.main.entities.Empresa;
 import com.app.main.repositories.EmpresaRepository;
 
 @Service
 public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
-	
+	@Autowired
 	private EmpresaRepository repository;
 	
 	
-	public EmpresaService(EmpresaRepository repository) {
-		this.repository = repository;
-	}
-	
-	
 	@Override
-	public List<Empresa> getAll() {
-		List<Empresa> empresas = new ArrayList<Empresa>();
-		
-		for (Empresa emp : this.repository.findAll()) {
-			Empresa temp = new Empresa();
+	@Transactional
+	public List<Empresa> getAll() throws Exception{
+		try {
+			List<Empresa> empresas = new ArrayList<Empresa>();
 			
-			temp.setDenominacion(emp.getDenominacion());
-			temp.setDomicilio(emp.getDomicilio());
-			temp.setEmail(emp.getEmail());
-			temp.setHorario(emp.getEmail());
-			temp.setLat(emp.getLat());
-			temp.setLon(emp.getLon());
-			temp.setQuienSomos(emp.getQuienSomos());
-			temp.setTelefono(emp.getTelefono());
-			
-			empresas.add(temp);
+			for (Empresa emp : repository.findAll()) {
+				Empresa temp = new Empresa();
+				
+				temp.setDenominacion(emp.getDenominacion());
+				temp.setDomicilio(emp.getDomicilio());
+				temp.setEmail(emp.getEmail());
+				temp.setHorario(emp.getHorario());
+				temp.setQuienSomos(emp.getQuienSomos());
+				temp.setLat(emp.getLat());
+				temp.setLon(emp.getLon());
+				temp.setTelefono(emp.getTelefono());
+				temp.setId(emp.getId());
+				
+				empresas.add(temp);
+			}
+			return empresas;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
 		}
-		
-		return empresas;
 	}
 
 	@Override
-	public Empresa getOne(int id) {
-		Optional<Empresa> optEMpresa = this.repository.findById(id);
+	@Transactional
+	public Empresa getOne(int id) throws Exception{
+		try {
+			Optional<Empresa> optEmpresa = repository.findById(id);
+			return optEmpresa.get();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	@Override
+	@Transactional
+	public Empresa save(Empresa entity) throws Exception{
+		try {
+			Empresa emp = new Empresa();
+			
+			emp.setDenominacion(entity.getDenominacion());
+			emp.setDomicilio(entity.getDomicilio());
+			emp.setEmail(entity.getEmail());
+			emp.setHorario(entity.getHorario());
+			emp.setQuienSomos(entity.getQuienSomos());
+			emp.setLat(entity.getLat());
+			emp.setLon(entity.getLon());
+			emp.setTelefono(entity.getTelefono());
+			
+			entity = repository.save(emp);
+			return entity;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+		
+	}
+
+	@Override
+	@Transactional
+	public Empresa update(Empresa entity, int id) throws Exception{
+		Optional<Empresa> optEmpresa = repository.findById(id);
 		Empresa temp = new Empresa();
-		
 		try {
-			Empresa emp = optEMpresa.get();
+			temp = optEmpresa.get();
 			
-			temp.setDenominacion(emp.getDenominacion());
-			temp.setDomicilio(emp.getDomicilio());
-			temp.setEmail(emp.getEmail());
-			temp.setHorario(emp.getEmail());
-			temp.setLat(emp.getLat());
-			temp.setLon(emp.getLon());
-			temp.setQuienSomos(emp.getQuienSomos());
+			temp.setDenominacion(entity.getDenominacion());
+			temp.setDomicilio(entity.getDomicilio());
+			temp.setEmail(entity.getEmail());
+			temp.setHorario(entity.getHorario());
+			temp.setQuienSomos(entity.getQuienSomos());
+			temp.setLat(entity.getLat());
+			temp.setLon(entity.getLon());
+			temp.setTelefono(entity.getTelefono());
 			
+			temp = repository.save(temp);
+			entity.setId(temp.getId());
+			return entity;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
-		return temp;
+		
 	}
 
 	@Override
-	public Empresa save(Empresa t) {
-		Empresa emp = new Empresa();
-		
-		emp.setDenominacion(t.getDenominacion());
-		emp.setDomicilio(t.getDomicilio());
-		emp.setEmail(t.getEmail());
-		emp.setHorario(t.getHorario());
-		emp.setLat(t.getLat());
-		emp.setLon(t.getLon());
-		emp.setQuienSomos(t.getQuienSomos());
-		emp.setTelefono(t.getTelefono());
-		
+	@Transactional
+	public boolean delete(int id) throws Exception{
 		try {
-			this.repository.save(emp);
+			if (repository.existsById(id)) {
+				repository.deleteById(id);
+				return true;
+			} else {
+				throw new Exception();
+			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
-		
-		t.setId(emp.getId());
-		
-		return t;
-	}
-
-	@Override
-	public Empresa update(Empresa t, int id) {
-		Optional<Empresa> optEmp = this.repository.findById(id);
-		Empresa temp = new Empresa();
-		
-		try {
-			temp = optEmp.get();
-			
-			temp.setDenominacion(t.getDenominacion());
-			temp.setDomicilio(t.getDomicilio());
-			temp.setEmail(t.getEmail());
-			temp.setHorario(t.getHorario());
-			temp.setLat(t.getLat());
-			temp.setLon(t.getLon());
-			temp.setQuienSomos(t.getQuienSomos());
-			temp.setTelefono(t.getTelefono());
-			
-			this.repository.save(temp);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			temp.setId(0);
-		}
-		temp.setId(temp.getId());
-		return t;
-	}
-
-	@Override
-	public boolean delete(int id) {
-		try {
-			repository.deleteById(id);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
 	}
 }

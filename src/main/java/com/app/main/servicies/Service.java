@@ -2,14 +2,14 @@ package com.app.main.servicies;
 
 import java.util.List;
 
-public interface Service <T> {
-	public List<T> getAll();
+public interface Service <E> {
+	public List<E> getAll() throws Exception;
 	
-	public T getOne(int id);
+	public E getOne(int id) throws Exception;
 	
-	public T save(T t);
+	public E save(E entity) throws Exception;
 	
-	public T update(T t, int id);
+	public E update(E entity, int id) throws Exception;
 	
-	public boolean delete(int id);
+	public boolean delete(int id) throws Exception;
 }

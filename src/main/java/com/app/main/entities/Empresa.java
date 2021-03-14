@@ -1,5 +1,7 @@
 package com.app.main.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,7 +9,10 @@ import javax.persistence.Id;
 
 
 @Entity
-public class Empresa {
+public class Empresa implements Serializable{
+	
+	private static final long serialVersionUID = 1l;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -24,8 +29,7 @@ public class Empresa {
 	
 	public Empresa() { }
 
-	public Empresa(String denominacion, String telefono, String horario, String quienSomos, float lat, float lon,
-			String domicilio, String email) {
+	public Empresa(String denominacion, String telefono, String horario, String quienSomos, float lat, float lon, String domicilio, String email) {
 		this.denominacion = denominacion;
 		this.telefono = telefono;
 		this.horario = horario;

@@ -5,117 +5,122 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.main.entities.Noticia;
 import com.app.main.repositories.NoticiaRepository;
 
+
 @Service
 public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
+	
+	@Autowired
 	private NoticiaRepository repository;
 
 	
-	public NoticiaService(NoticiaRepository repository) {
-		super();
-		this.repository = repository;
-	}
-	
-
 	@Override
-	public List<Noticia> getAll() {
-		List<Noticia> noticias = new ArrayList<Noticia>();
-		
-		for (Noticia noticia : this.repository.findAll()) {
-			Noticia temp = new Noticia();
-			
-			temp.setContent(noticia.getContent());
-			temp.setFecha(noticia.getFecha());
-			temp.setImg(noticia.getImg());
-			temp.setPublicado(noticia.isPublicado());
-			temp.setResumen(noticia.getResumen());
-			temp.setTitulo(noticia.getTitulo());
-			
-			temp.setEmpresa(noticia.getEmpresa());
-			
-			noticias.add(temp);
-		}
-		return noticias;
-	}
-
-	@Override
-	public Noticia getOne(int id) {
-		Optional<Noticia> optNoticia = this.repository.findById(id);
-		Noticia temp = new Noticia();
+	@Transactional
+	public List<Noticia> getAll() throws Exception {
 		try {
-			Noticia noticia = optNoticia.get();
+			List<Noticia> noticias = new ArrayList<Noticia>();
 			
-			temp.setContent(noticia.getContent());
-			temp.setFecha(noticia.getFecha());
-			temp.setImg(noticia.getImg());
-			temp.setPublicado(noticia.isPublicado());
-			temp.setResumen(noticia.getResumen());
-			temp.setTitulo(noticia.getTitulo());
+			for (Noticia noticia : repository.findAll()) {
+				Noticia temp = new Noticia();
+				
+				temp.setContent(noticia.getContent());
+				temp.setFecha(noticia.getFecha());
+				temp.setId(noticia.getId());
+				temp.setImg(noticia.getImg());
+				temp.setPublicado(noticia.isPublicado());
+				temp.setResumen(noticia.getResumen());
+				temp.setTitulo(noticia.getTitulo());
+				
+				temp.setEmpresa(noticia.getEmpresa());
+				
+				noticias.add(temp);
+			}
 			
-			temp.setEmpresa(noticia.getEmpresa());
+			return noticias;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
-		
-		return temp;
 	}
 
 	@Override
-	public Noticia save(Noticia t) {
-		Noticia noticia = new Noticia();
-		
-		noticia.setContent(t.getContent());
-		noticia.setFecha(Calendar.getInstance());
-		noticia.setImg(t.getImg());
-		noticia.setPublicado(t.isPublicado());
-		noticia.setResumen(t.getResumen());
-		noticia.setTitulo(t.getTitulo());
-		
-		noticia.setEmpresa(t.getEmpresa());
+	@Transactional
+	public Noticia getOne(int id) throws Exception {
 		try {
-			this.repository.save(noticia);
+			Optional<Noticia> optNoticia = repository.findById(id);
+			Noticia noticia = new Noticia();
+			
+			noticia = optNoticia.get();
+			
+			return noticia;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
-		t.setId(noticia.getId());
-		return t;
 	}
 
 	@Override
-	public Noticia update(Noticia t, int id) {
-		Optional<Noticia> optNoticia = this.repository.findById(id);
-		Noticia temp = new Noticia();
-		
+	@Transactional
+	public Noticia save(Noticia entity) throws Exception {
+		try {
+			Noticia noticia = new Noticia();
+			
+			noticia.setContent(entity.getContent());
+			noticia.setFecha(Calendar.getInstance());
+			noticia.setImg(entity.getImg());
+			noticia.setPublicado(entity.isPublicado());
+			noticia.setResumen(entity.getResumen());
+			noticia.setTitulo(entity.getTitulo());
+			
+			noticia.setEmpresa(entity.getEmpresa());
+			
+			entity = repository.save(noticia);
+			return entity;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	@Override
+	@Transactional
+	public Noticia update(Noticia entity, int id) throws Exception {
+		Optional<Noticia> optNoticia = repository.findById(id);
+		Noticia temp = new Noticia() ;
 		try {
 			temp = optNoticia.get();
+			temp.setContent(entity.getContent());
+			temp.setFecha(Calendar.getInstance());
+			temp.setId(entity.getId());
+			temp.setImg(entity.getImg());
+			temp.setPublicado(entity.isPublicado());
+			temp.setResumen(entity.getResumen());
+			temp.setTitulo(entity.getTitulo());
 			
-			temp.setContent(t.getContent());
-			temp.setFecha(t.getFecha());
-			temp.setImg(t.getImg());
-			temp.setPublicado(t.isPublicado());
-			temp.setResumen(t.getResumen());
-			temp.setTitulo(t.getTitulo());
-			
-			temp.setEmpresa(t.getEmpresa());
+			temp.setEmpresa(entity.getEmpresa());
+			repository.save(temp);
+			entity.setId(temp.getId());
+			return entity;
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
-		t.setId(temp.getId());
-		return t;
 	}
 
 	@Override
-	public boolean delete(int id) {
+	@Transactional
+	public boolean delete(int id) throws Exception {
 		try {
-			this.repository.deleteById(id);
+			if (repository.existsById(id)) {
+				repository.deleteById(id);
+				return true;
+			} else {
+				throw new Exception();
+			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return false;
+			throw new Exception(e.getMessage());
 		}
-		return true;
 	}
 }

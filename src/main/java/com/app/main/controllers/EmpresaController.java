@@ -1,7 +1,6 @@
 package com.app.main.controllers;
 
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,69 +17,68 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.main.entities.Empresa;
 import com.app.main.servicies.EmpresaService;
 
+
 @Controller
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path = "api/v1/empresas")
 public class EmpresaController implements com.app.main.controllers.Controller<Empresa>{
+	@Autowired
 	private EmpresaService service;
-
-	
-	public EmpresaController(EmpresaService service) {
-		this.service = service;
-	}
 
 	
 	@Override
 	@GetMapping(path = "/")
-	@CrossOrigin("*")
-	public List<Empresa> getAll() {
-		return ResponseEntity.status(HttpStatus.OK).body(service.getAll()).getBody();
+	public ResponseEntity<?> getAll() throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
 	}
 
 	@Override
 	@GetMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public Empresa getOne(@PathVariable int id) {
-		return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id)).getBody();
+	public ResponseEntity<?> getOne(@PathVariable int id) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
 	}
 
 	@Override
 	@PostMapping(path = "/")
-	@CrossOrigin("*")
-	public ResponseEntity save(Empresa t) {
-		Empresa emp = this.service.save(t);
-		
-		if(emp.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(service.save(t));
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> save(@RequestBody Empresa entity) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.save(entity));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 
 	@Override
 	@PutMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public ResponseEntity update(@RequestBody Empresa t, @PathVariable int id) {
-		Empresa temp = service.update(t, id);
-		
-		if(temp.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(temp);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> update(@RequestBody Empresa entity, @PathVariable int id) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.update(entity, id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
-		
 	}
 
 	@Override
 	@DeleteMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public ResponseEntity delete(@PathVariable int id) {
-		boolean isDet = this.service.delete(id);
-		
-		if (isDet) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("\"Message\":\"Deleted\"");
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> delete(@PathVariable int id) throws Exception {
+		try {
+			boolean isDet = this.service.delete(id);
+			if (isDet) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("\"Message\":\"Deleted\"");
+			} else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 }

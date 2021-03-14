@@ -1,17 +1,16 @@
 package com.app.main.controllers;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 
-public interface Controller <T>{
-	public List<T> getAll();
+
+public interface Controller <E>{
+	public ResponseEntity<?> getAll() throws Exception;
 	
-	public T getOne(int id);
+	public ResponseEntity<?> getOne(int id) throws Exception;
 	
-	public ResponseEntity save(T t);
+	public ResponseEntity<?>save(E entity) throws Exception;
 	
-	public ResponseEntity update(T t, int id);
+	public ResponseEntity<?> update(E entity, int id) throws Exception;
 	
-	public ResponseEntity delete(int id);
+	public ResponseEntity<?> delete(int id) throws Exception;
 }

@@ -1,7 +1,6 @@
 package com.app.main.controllers;
 
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,69 +20,68 @@ import com.app.main.servicies.NoticiaService;
 
 @Controller
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path = "api/v1/noticias")
 public class NoticiaController implements com.app.main.controllers.Controller<Noticia>{
+	@Autowired
 	private NoticiaService service;
-
-	
-	public NoticiaController(NoticiaService service) {
-		this.service = service;
-	}
 
 	
 	@Override
 	@GetMapping(path = "/")
-	@CrossOrigin("*")
-	public List<Noticia> getAll() {
-		return ResponseEntity.status(HttpStatus.OK).body(service.getAll()).getBody();
+	public ResponseEntity<?> getAll() throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
 	}
 
 
 	@Override
 	@GetMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public Noticia getOne(int id) {
-		return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id)).getBody();
+	public ResponseEntity<?> getOne(int id) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
 	}
 
 
 	@Override
 	@PostMapping(path = "/")
-	@CrossOrigin("*")
-	public ResponseEntity save(@RequestBody Noticia t) {
-		Noticia noticia = this.service.save(t);
-		
-		if(noticia.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(noticia);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> save(@RequestBody Noticia entity) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.save(entity));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 
 
 	@Override
 	@PutMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public ResponseEntity update(@RequestBody Noticia t, @PathVariable int id) {
-		Noticia noticia = service.update(t, id);
-		
-		if(noticia.getId() != 0) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(noticia);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> update(@RequestBody Noticia entity, @PathVariable int id) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.update(entity, id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 
 	@Override
 	@DeleteMapping(path = "/{id}")
-	@CrossOrigin("*")
-	public ResponseEntity delete(@PathVariable int id) {
-		boolean isDet = this.service.delete(id);
-		
-		if (isDet) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("\"Message\":\"Deleted\"");
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+	public ResponseEntity<?> delete(@PathVariable int id) throws Exception {
+		try {
+			boolean isDet = this.service.delete(id);
+			if (isDet) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("\"Message\":\"Deleted\"");
+			} else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"Error\":\"Bad Request\"");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 }

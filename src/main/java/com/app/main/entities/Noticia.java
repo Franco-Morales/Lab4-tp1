@@ -1,11 +1,11 @@
 package com.app.main.entities;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +16,10 @@ import javax.persistence.TemporalType;
 
 
 @Entity
-public class Noticia {
+public class Noticia implements Serializable{
+	
+	private static final long serialVersionUID = 1l;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -31,16 +34,14 @@ public class Noticia {
 	@Column(updatable = false, nullable = false)
 	private Calendar fecha;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_empresa")
 	private Empresa empresa;
 
 	
 	public Noticia() { }
 	
-	
-	public Noticia(String titulo, String resumen, String img, String content, boolean publicado, Calendar fecha,
-			Empresa empresa) {
+	public Noticia(String titulo, String resumen, String img, String content, boolean publicado, Calendar fecha, Empresa empresa) {
 		this.titulo = titulo;
 		this.resumen = resumen;
 		this.img = img;
