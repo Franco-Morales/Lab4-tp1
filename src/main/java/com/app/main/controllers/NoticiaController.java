@@ -39,7 +39,7 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 	}
 	
 	
-	@GetMapping("/search")
+	@GetMapping(path = "/search")
 	public ResponseEntity<?> search(@RequestParam String query) throws Exception {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(service.search(query));
@@ -49,7 +49,7 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 	}
 	
 	
-	@GetMapping("/firstFive")
+	@GetMapping(path = "/firstFive")
 	public ResponseEntity<?> firstFive() throws Exception {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(service.fisrtFiveNoticias());
@@ -61,9 +61,14 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 	
 	@Override
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> getOne(int id) throws Exception {
+	public ResponseEntity<?> getOne(@PathVariable int id) throws Exception {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(service.getOne(id));
+			Noticia noticia = service.getOne(id);
+			if(noticia != null) {
+				return ResponseEntity.status(HttpStatus.OK).body(noticia);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}

@@ -1,7 +1,8 @@
 package com.app.main.servicies;
 
+
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 
 	
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Noticia> getAll() throws Exception {
 		try {
 			List<Noticia> noticias = new ArrayList<Noticia>();
@@ -49,15 +50,16 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public Noticia getOne(int id) throws Exception {
 		try {
 			Optional<Noticia> optNoticia = repository.findById(id);
-			Noticia noticia = new Noticia();
+			if(optNoticia.isEmpty()) {
+				return null;
+			} else {
+				return optNoticia.get();
+			}
 			
-			noticia = optNoticia.get();
-			
-			return noticia;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -70,7 +72,7 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			Noticia noticia = new Noticia();
 			
 			noticia.setContent(entity.getContent());
-			noticia.setFecha(Calendar.getInstance());
+			noticia.setFecha(new Date());
 			noticia.setImg(entity.getImg());
 			noticia.setPublicado(entity.isPublicado());
 			noticia.setResumen(entity.getResumen());
@@ -93,8 +95,7 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 		try {
 			temp = optNoticia.get();
 			temp.setContent(entity.getContent());
-			temp.setFecha(Calendar.getInstance());
-			temp.setId(entity.getId());
+			temp.setFecha(new Date());
 			temp.setImg(entity.getImg());
 			temp.setPublicado(entity.isPublicado());
 			temp.setResumen(entity.getResumen());
@@ -127,7 +128,7 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	
 	//Search y Limit
 	
-	
+	@Transactional(readOnly = true)
 	public List<Noticia> search(String query) throws Exception {
 		try {
 			List<Noticia> noticias = new ArrayList<Noticia>();
@@ -152,7 +153,8 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			throw new Exception(e.getMessage());
 		}
 	}
-
+	
+	@Transactional(readOnly = true)
 	public List<Noticia> fisrtFiveNoticias() throws Exception {
 		try {
 			List<Noticia> noticias = new ArrayList<Noticia>();

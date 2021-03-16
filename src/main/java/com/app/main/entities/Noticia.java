@@ -1,7 +1,7 @@
 package com.app.main.entities;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,11 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
 @Entity
+@Table(name = "noticias")
 public class Noticia implements Serializable{
 	
 	private static final long serialVersionUID = 1l;
@@ -30,9 +32,9 @@ public class Noticia implements Serializable{
 	private String content;
 	private boolean publicado;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
-	private Calendar fecha;
+	private Date fecha;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_empresa")
@@ -41,7 +43,7 @@ public class Noticia implements Serializable{
 	
 	public Noticia() { }
 	
-	public Noticia(String titulo, String resumen, String img, String content, boolean publicado, Calendar fecha, Empresa empresa) {
+	public Noticia(String titulo, String resumen, String img, String content, boolean publicado, Date fecha, Empresa empresa) {
 		this.titulo = titulo;
 		this.resumen = resumen;
 		this.img = img;
@@ -99,10 +101,10 @@ public class Noticia implements Serializable{
 	}
 
 
-	public Calendar getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(Calendar fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 
