@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,17 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			}
 			
 			return noticias;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+
+
+	@Override
+	public Page<Noticia> getAll(Pageable pageable) throws Exception {
+		try {
+			return repository.findAll(pageable);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}

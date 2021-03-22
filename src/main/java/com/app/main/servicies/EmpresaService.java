@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,8 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 				temp.setDenominacion(emp.getDenominacion());
 				temp.setDomicilio(emp.getDomicilio());
 				temp.setEmail(emp.getEmail());
-				temp.setHorario(emp.getHorario());
+				temp.setInicio(emp.getInicio());
+				temp.setCierre(emp.getCierre());
 				temp.setQuienSomos(emp.getQuienSomos());
 				temp.setLat(emp.getLat());
 				temp.setLon(emp.getLon());
@@ -40,6 +43,18 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 			}
 			return empresas;
 		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Empresa> getAll(Pageable pageable) throws Exception {
+		try {
+			return repository.findAll(pageable);
+		} catch (Exception e) {
+			// TODO: handle exception
 			throw new Exception(e.getMessage());
 		}
 	}
@@ -64,7 +79,8 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 			emp.setDenominacion(entity.getDenominacion());
 			emp.setDomicilio(entity.getDomicilio());
 			emp.setEmail(entity.getEmail());
-			emp.setHorario(entity.getHorario());
+			emp.setInicio(entity.getInicio());
+			emp.setCierre(entity.getCierre());
 			emp.setQuienSomos(entity.getQuienSomos());
 			emp.setLat(entity.getLat());
 			emp.setLon(entity.getLon());
@@ -89,7 +105,8 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 			temp.setDenominacion(entity.getDenominacion());
 			temp.setDomicilio(entity.getDomicilio());
 			temp.setEmail(entity.getEmail());
-			temp.setHorario(entity.getHorario());
+			temp.setInicio(entity.getInicio());
+			temp.setCierre(entity.getCierre());
 			temp.setQuienSomos(entity.getQuienSomos());
 			temp.setLat(entity.getLat());
 			temp.setLon(entity.getLon());
@@ -118,4 +135,5 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 			throw new Exception(e.getMessage());
 		}
 	}
+
 }

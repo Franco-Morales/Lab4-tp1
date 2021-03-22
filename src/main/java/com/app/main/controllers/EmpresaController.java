@@ -1,6 +1,7 @@
 package com.app.main.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import com.app.main.servicies.EmpresaService;
 @Controller
 @RestController
 @CrossOrigin("*")
-@RequestMapping(path = "api/v1/empresas")
+@RequestMapping(path = "api/v1/crud/empresa")
 public class EmpresaController implements com.app.main.controllers.Controller<Empresa>{
 	@Autowired
 	private EmpresaService service;
@@ -32,6 +33,16 @@ public class EmpresaController implements com.app.main.controllers.Controller<Em
 	public ResponseEntity<?> getAll() throws Exception {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
+	}
+	
+	@Override
+	@GetMapping(path = "/pagina")
+	public ResponseEntity<?> getAll(Pageable pageable) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getAll(pageable));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}

@@ -1,12 +1,15 @@
 package com.app.main.entities;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -21,7 +24,9 @@ public class Empresa implements Serializable{
 	
 	private String denominacion;
 	private String telefono;
-	private String horario;
+	@Temporal(TemporalType.TIME)
+	private Calendar inicio;
+	private Calendar cierre;
 	private String quienSomos;
 	private float lat;
 	private float lon;
@@ -31,10 +36,11 @@ public class Empresa implements Serializable{
 	
 	public Empresa() { }
 
-	public Empresa(String denominacion, String telefono, String horario, String quienSomos, float lat, float lon, String domicilio, String email) {
+	public Empresa(String denominacion, String telefono, Calendar inicio, Calendar cierre, String quienSomos, float lat, float lon, String domicilio, String email) {
 		this.denominacion = denominacion;
 		this.telefono = telefono;
-		this.horario = horario;
+		this.inicio = inicio;
+		this.cierre = cierre;
 		this.quienSomos = quienSomos;
 		this.lat = lat;
 		this.lon = lon;
@@ -49,7 +55,6 @@ public class Empresa implements Serializable{
 	public void setId(int id) {
 		 this.id = id;
 	}
-	
 	public String getDenominacion() {
 		return denominacion;
 	}
@@ -63,42 +68,42 @@ public class Empresa implements Serializable{
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-	
-	public String getHorario() {
-		return horario;
+	public Calendar getInicio() {
+		return inicio;
 	}
-	public void setHorario(String horario) {
-		this.horario = horario;
+	public void setInicio(Calendar inicio) {
+		this.inicio = inicio;
 	}
-	
+	public Calendar getCierre() {
+		return cierre;
+	}
+	public void setCierre(Calendar cierre) {
+		this.cierre = cierre;
+	}
 	public String getQuienSomos() {
 		return quienSomos;
 	}
 	public void setQuienSomos(String quienSomos) {
 		this.quienSomos = quienSomos;
 	}
-	
 	public float getLat() {
 		return lat;
 	}
 	public void setLat(float lat) {
 		this.lat = lat;
 	}
-	
 	public float getLon() {
 		return lon;
 	}
 	public void setLon(float lon) {
 		this.lon = lon;
 	}
-	
 	public String getDomicilio() {
 		return domicilio;
 	}
 	public void setDomicilio(String domicilio) {
 		this.domicilio = domicilio;
 	}
-	
 	public String getEmail() {
 		return email;
 	}

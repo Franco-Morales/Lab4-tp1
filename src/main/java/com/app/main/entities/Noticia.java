@@ -67,48 +67,36 @@ public class Noticia implements Serializable{
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-
-
 	public String getResumen() {
 		return resumen;
 	}
 	public void setResumen(String resumen) {
 		this.resumen = resumen;
 	}
-
-
 	public String getImg() {
 		return img;
 	}
 	public void setImg(String img) {
 		this.img = img;
 	}
-
-
 	public String getContent() {
 		return content;
 	}
 	public void setContent(String content) {
 		this.content = content;
 	}
-
-
 	public boolean isPublicado() {
 		return publicado;
 	}
 	public void setPublicado(boolean publicado) {
 		this.publicado = publicado;
 	}
-
-
 	public Date getFecha() {
 		return fecha;
 	}
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-
-	
 	public Empresa getEmpresa() {
 		return empresa;
 	}

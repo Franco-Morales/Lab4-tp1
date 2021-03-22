@@ -1,6 +1,7 @@
 package com.app.main.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import com.app.main.servicies.NoticiaService;
 @Controller
 @RestController
 @CrossOrigin("*")
-@RequestMapping(path = "api/v1/noticias")
+@RequestMapping(path = "api/v1/crud/noticia")
 public class NoticiaController implements com.app.main.controllers.Controller<Noticia>{
 	@Autowired
 	private NoticiaService service;
@@ -33,6 +34,17 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 	public ResponseEntity<?> getAll() throws Exception {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(service.getAll());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
+		}
+	}
+	
+
+	@Override
+	@GetMapping(path = "/pagina")
+	public ResponseEntity<?> getAll(Pageable pageable) throws Exception {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.getAll(pageable));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
@@ -110,4 +122,6 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
+
+
 }
