@@ -10,10 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -28,9 +31,12 @@ public class Noticia implements Serializable{
 	
 	private String titulo;
 	private String resumen;
-	private String img;
 	private String content;
 	private boolean publicado;
+	
+	@Lob
+	@JsonIgnore
+	private byte[] img;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
@@ -43,7 +49,7 @@ public class Noticia implements Serializable{
 	
 	public Noticia() { }
 	
-	public Noticia(String titulo, String resumen, String img, String content, boolean publicado, Date fecha, Empresa empresa) {
+	public Noticia(String titulo, String resumen,byte[] img, String content, boolean publicado, Date fecha, Empresa empresa) {
 		this.titulo = titulo;
 		this.resumen = resumen;
 		this.img = img;
@@ -52,8 +58,11 @@ public class Noticia implements Serializable{
 		this.fecha = fecha;
 		this.empresa = empresa;
 	}
-
 	
+	public Integer getImgHashCode() {
+		return (this.img != null) ? this.img.hashCode() : null;
+	}
+
 	public int getId() {
 		return this.id;
 	}
@@ -61,6 +70,14 @@ public class Noticia implements Serializable{
 		 this.id = id;
 	}
 	
+	public byte[] getImg() {
+		return img;
+	}
+
+	public void setImg(byte[] img) {
+		this.img = img;
+	}
+
 	public String getTitulo() {
 		return titulo;
 	}
@@ -72,12 +89,6 @@ public class Noticia implements Serializable{
 	}
 	public void setResumen(String resumen) {
 		this.resumen = resumen;
-	}
-	public String getImg() {
-		return img;
-	}
-	public void setImg(String img) {
-		this.img = img;
 	}
 	public String getContent() {
 		return content;

@@ -35,7 +35,6 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 				temp.setContent(noticia.getContent());
 				temp.setFecha(noticia.getFecha());
 				temp.setId(noticia.getId());
-				temp.setImg(noticia.getImg());
 				temp.setPublicado(noticia.isPublicado());
 				temp.setResumen(noticia.getResumen());
 				temp.setTitulo(noticia.getTitulo());
@@ -82,18 +81,8 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	@Transactional
 	public Noticia save(Noticia entity) throws Exception {
 		try {
-			Noticia noticia = new Noticia();
-			
-			noticia.setContent(entity.getContent());
-			noticia.setFecha(new Date());
-			noticia.setImg(entity.getImg());
-			noticia.setPublicado(entity.isPublicado());
-			noticia.setResumen(entity.getResumen());
-			noticia.setTitulo(entity.getTitulo());
-			
-			noticia.setEmpresa(entity.getEmpresa());
-			
-			entity = repository.save(noticia);
+			entity.setFecha(new Date());
+			repository.save(entity);
 			return entity;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
@@ -109,14 +98,13 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			temp = optNoticia.get();
 			temp.setContent(entity.getContent());
 			temp.setFecha(new Date());
-			temp.setImg(entity.getImg());
 			temp.setPublicado(entity.isPublicado());
 			temp.setResumen(entity.getResumen());
 			temp.setTitulo(entity.getTitulo());
-			
 			temp.setEmpresa(entity.getEmpresa());
-			repository.save(temp);
+			temp.setImg((entity.getImg()));
 			entity.setId(temp.getId());
+			repository.save(temp);
 			return entity;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
@@ -142,52 +130,19 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	//Search y Limit
 	
 	@Transactional(readOnly = true)
-	public List<Noticia> search(String query) throws Exception {
+	public List<Noticia> findNoticiaWithTitleOrResumen(int id,String query) throws Exception{
 		try {
-			List<Noticia> noticias = new ArrayList<Noticia>();
-			
-			for (Noticia noticia : repository.search(query)) {
-				Noticia temp = new Noticia();
-				
-				temp.setContent(noticia.getContent());
-				temp.setFecha(noticia.getFecha());
-				temp.setId(noticia.getId());
-				temp.setImg(noticia.getImg());
-				temp.setPublicado(noticia.isPublicado());
-				temp.setResumen(noticia.getResumen());
-				temp.setTitulo(noticia.getTitulo());
-				
-				temp.setEmpresa(noticia.getEmpresa());
-				
-				noticias.add(temp);
-			}
-			return noticias;
+			return repository.searchNoticiaByTituloOrResumenAndEmpresa(id,query);
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			// TODO: handle exception
+			throw new Exception();
 		}
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Noticia> fisrtFiveNoticias() throws Exception {
+	public List<Noticia> fisrtFiveNoticias(int id) throws Exception {
 		try {
-			List<Noticia> noticias = new ArrayList<Noticia>();
-			
-			for (Noticia noticia : repository.primerasCincoNoticias()) {
-				Noticia temp = new Noticia();
-				
-				temp.setContent(noticia.getContent());
-				temp.setFecha(noticia.getFecha());
-				temp.setId(noticia.getId());
-				temp.setImg(noticia.getImg());
-				temp.setPublicado(noticia.isPublicado());
-				temp.setResumen(noticia.getResumen());
-				temp.setTitulo(noticia.getTitulo());
-				
-				temp.setEmpresa(noticia.getEmpresa());
-				
-				noticias.add(temp);
-			}
-			return noticias;
+			return repository.primerasCincoNoticias(id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
