@@ -1,6 +1,5 @@
 package com.app.main.servicies;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,42 +14,38 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.main.entities.Noticia;
 import com.app.main.repositories.NoticiaRepository;
 
-
 @Service
-public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
-	
+public class NoticiaService implements com.app.main.servicies.Service<Noticia> {
+
 	@Autowired
 	private NoticiaRepository repository;
 
-	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Noticia> getAll() throws Exception {
 		try {
 			List<Noticia> noticias = new ArrayList<Noticia>();
-			
+
 			for (Noticia noticia : repository.findAll()) {
 				Noticia temp = new Noticia();
-				
+
 				temp.setContent(noticia.getContent());
 				temp.setFecha(noticia.getFecha());
 				temp.setId(noticia.getId());
 				temp.setPublicado(noticia.isPublicado());
 				temp.setResumen(noticia.getResumen());
 				temp.setTitulo(noticia.getTitulo());
-				
+
 				temp.setEmpresa(noticia.getEmpresa());
-				
+
 				noticias.add(temp);
 			}
-			
+
 			return noticias;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
 	}
-	
-
 
 	@Override
 	public Page<Noticia> getAll(Pageable pageable) throws Exception {
@@ -66,12 +61,12 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	public Noticia getOne(int id) throws Exception {
 		try {
 			Optional<Noticia> optNoticia = repository.findById(id);
-			if(optNoticia.isEmpty()) {
+			if (optNoticia.isEmpty()) {
 				return null;
 			} else {
 				return optNoticia.get();
 			}
-			
+
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -92,16 +87,20 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	@Transactional
 	public Noticia update(Noticia entity, int id) throws Exception {
 		Optional<Noticia> optNoticia = repository.findById(id);
-		Noticia temp = new Noticia() ;
+		Noticia temp = new Noticia();
 		try {
 			temp = optNoticia.get();
+			if (entity.getImg() != null) {
+				temp.setImg(entity.getImg());
+			}else {
+				temp.setImg(optNoticia.get().getImg());
+			}
 			temp.setContent(entity.getContent());
 			temp.setFecha(new Date());
 			temp.setPublicado(entity.isPublicado());
 			temp.setResumen(entity.getResumen());
 			temp.setTitulo(entity.getTitulo());
 			temp.setEmpresa(entity.getEmpresa());
-			temp.setImg((entity.getImg()));
 			entity.setId(temp.getId());
 			repository.save(temp);
 			return entity;
@@ -125,11 +124,10 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 		}
 	}
 
-	
-	//Search y Limit
-	
+	// Search y Limit
+
 	@Transactional(readOnly = true)
-	public List<Noticia> findNoticiaWithTitleOrResumen(String query) throws Exception{
+	public List<Noticia> findNoticiaWithTitleOrResumen(String query) throws Exception {
 		try {
 			return repository.searchNoticiaByTituloOrResumen(query);
 		} catch (Exception e) {
@@ -137,7 +135,7 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 			throw new Exception();
 		}
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<Noticia> fisrtFiveNoticias() throws Exception {
 		try {
