@@ -126,6 +126,7 @@ public class EmpresaService implements com.app.main.servicies.Service<Empresa>{
 	public boolean delete(int id) throws Exception{
 		try {
 			if (repository.existsById(id)) {
+				repository.deleteNoticiasByEmpresa(id);
 				repository.deleteById(id);
 				return true;
 			} else {
