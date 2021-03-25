@@ -81,7 +81,6 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	@Transactional
 	public Noticia save(Noticia entity) throws Exception {
 		try {
-			entity.setFecha(new Date());
 			repository.save(entity);
 			return entity;
 		} catch (Exception e) {
@@ -130,9 +129,9 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	//Search y Limit
 	
 	@Transactional(readOnly = true)
-	public List<Noticia> findNoticiaWithTitleOrResumen(int id,String query) throws Exception{
+	public List<Noticia> findNoticiaWithTitleOrResumen(String query) throws Exception{
 		try {
-			return repository.searchNoticiaByTituloOrResumenAndEmpresa(id,query);
+			return repository.searchNoticiaByTituloOrResumen(query);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new Exception();
@@ -140,9 +139,9 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia>{
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Noticia> fisrtFiveNoticias(int id) throws Exception {
+	public List<Noticia> fisrtFiveNoticias() throws Exception {
 		try {
-			return repository.primerasCincoNoticias(id);
+			return repository.primerasCincoNoticias();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
