@@ -12,15 +12,15 @@ import com.app.main.entities.Noticia;
 @Repository
 public interface NoticiaRepository extends PagingAndSortingRepository<Noticia, Integer>{
 	@Query(
-		value = "SELECT * FROM noticias WHERE noticias.publicado = true ORDER BY noticias.fecha DESC LIMIT 5",
+		value = "SELECT * FROM noticias WHERE noticias.publicado = true AND noticias.fk_empresa = :id ORDER BY noticias.fecha DESC LIMIT 5",
 		nativeQuery = true
 	)
-	List<Noticia> primerasCincoNoticias();
+	List<Noticia> primerasCincoNoticias(@Param("id") int id);
 	
 	@Query(
-	value = "SELECT * FROM noticias WHERE noticias.publicado = true AND noticias.titulo LIKE %:q% OR noticias.resumen LIKE %:q% ORDER BY noticias.fecha DESC LIMIT 20 "
+	value = "SELECT * FROM noticias WHERE noticias.publicado = true AND noticias.fk_empresa = :id AND noticias.titulo LIKE %:q% OR noticias.resumen LIKE %:q% ORDER BY noticias.fecha DESC LIMIT 20 "
 	, nativeQuery = true)
-	List<Noticia> searchNoticiaByTituloOrResumen(@Param("q") String query);
+	List<Noticia> searchNoticiaByTituloOrResumen(@Param("id") int id,@Param("q") String query);
 	
 	
 }

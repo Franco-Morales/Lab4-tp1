@@ -54,20 +54,20 @@ public class NoticiaController implements com.app.main.controllers.Controller<No
 		}
 	}
 	
-	@GetMapping(path = "/search")
-	public ResponseEntity<?> searchByTituloOrResumen(@RequestParam String query) throws Exception {
+	@GetMapping(path = "/{id}/search")
+	public ResponseEntity<?> searchByTituloOrResumen(@PathVariable int id,@RequestParam String query) throws Exception {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(service.findNoticiaWithTitleOrResumen(query));
+			return ResponseEntity.status(HttpStatus.OK).body(service.findNoticiaWithTitleOrResumen(id,query));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}
 	}
 	
 	
-	@GetMapping(path = "/firstFive")
-	public ResponseEntity<?> firstFive() throws Exception {
+	@GetMapping(path = "/{id}/firstFive")
+	public ResponseEntity<?> firstFive(@PathVariable int id) throws Exception {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(service.fisrtFiveNoticias());
+			return ResponseEntity.status(HttpStatus.OK).body(service.fisrtFiveNoticias(id));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"Error\":\""+e.getMessage()+"\"");
 		}

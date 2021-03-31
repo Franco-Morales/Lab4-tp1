@@ -127,9 +127,9 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia> {
 	// Search y Limit
 
 	@Transactional(readOnly = true)
-	public List<Noticia> findNoticiaWithTitleOrResumen(String query) throws Exception {
+	public List<Noticia> findNoticiaWithTitleOrResumen(int id,String query) throws Exception {
 		try {
-			return repository.searchNoticiaByTituloOrResumen(query);
+			return repository.searchNoticiaByTituloOrResumen(id,query);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new Exception();
@@ -137,9 +137,9 @@ public class NoticiaService implements com.app.main.servicies.Service<Noticia> {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Noticia> fisrtFiveNoticias() throws Exception {
+	public List<Noticia> fisrtFiveNoticias(int id) throws Exception {
 		try {
-			return repository.primerasCincoNoticias();
+			return repository.primerasCincoNoticias(id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
